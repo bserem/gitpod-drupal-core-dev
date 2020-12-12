@@ -1,0 +1,30 @@
+# Git aliases and project-wide configuration.
+# Save author and email as environmental variables in your gitpod profile.
+gitConfig:
+  alias.st: status
+  alias.co: checkout
+  alias.ci: commit
+  alias.br: branch
+
+# List the ports you want to expose and what to do when they are served. See https://www.gitpod.io/docs/config-ports/
+ports:
+- port: 8888
+  onOpen: open-preview
+- port: 8899
+  onOpen: open-browser
+
+# List the start up tasks. You can start them in parallel in multiple terminals.
+# See https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+- init:  git submodule init && git submodule update && cd adminer && wget https://github.com/vrana/adminer/releases/download/v4.7.8/adminer-4.7.8.php && mkdir plugins && cd plugins && wget https://raw.githubusercontent.com/vrana/adminer/master/plugins/login-password-less.php && wget https://raw.github.com/vrana/adminer/master/plugins/plugin.php && cd /workspace/gitpod-drupal-core-dev/drupal && composer install
+  command: php core/scripts/drupal quick-start demo_umami --host=0.0.0.0:8888 -s
+  name: Server
+- command: gp await-port 8888 && cd adminer && php -S 0.0.0.0:8899
+  name: Adminer Server
+- command: echo "Welcome, please allow Server terminal to finish composer and drupal install. It takes a while!"
+  name: Terminal
+
+vscode:
+  extensions:
+    - neilbrayfield.php-docblocker@2.1.0:DG/0jImoYat50A1oQ633dQ==
+    - mblode.twig-language-2@0.9.1:RU6BsxXlTQVjCzHru+HmBw==
